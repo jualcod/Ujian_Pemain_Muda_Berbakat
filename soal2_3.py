@@ -8,15 +8,19 @@ from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 
+# =============================================
+# Establish Dataset, Pre-processing
+# =============================================
 # Importing Original Data
 df = pd.read_csv('data.csv')
 df = df[['Name', 'Age', 'Overall', 'Potential']]
 df = df.fillna(np.NaN)
-
 # print(df.head())
 print(df.info())	# Clean
 
+# =============================================
 # Processing
+# =============================================
 ind_Targets = []
 bool_Targets = []
 
@@ -26,34 +30,28 @@ for n,x,y in zip(df.index, df.Age, df.Overall):
 		bool_Targets.append(1)
 	else:
 		bool_Targets.append(0)		
-print(len(ind_Targets))
-print(len(bool_Targets))
 
 df['Targets'] = bool_Targets		# print(df.Targets.iloc[15])	# 1 True
 
 # y Target Separation
 df_targeted		= df[df.Targets == 1]			# df.species_name=='setosa' returns bool True/False
 df_nontarget	= df[df.Targets == 0]
-print(len(df_targeted))
 
-
-# Initial Splitting
+# =====================================
+# Machine Learning
+# =====================================
+"""	"""
+# Splitting
 X = df[['Age', 'Overall', 'Potential']]
 y = df.Targets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
-
-# =====================================
-# Machine Learning # Done
-# =====================================
-"""	"""
 # Model Fitting
 clf = SVC(gamma='auto')
 clf.fit(X_train, y_train)
 
 model	= LogisticRegression(multi_class='auto',solver='liblinear')
 model.fit(X_train, y_train)
-
 
 # Importing Test Data
 df_test = pd.read_csv('test_data.csv')
